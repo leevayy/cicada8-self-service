@@ -9,9 +9,8 @@ const userData = {
     "letterNumber": "123/456",
     "currentDate": "2024-05-26",
     "representative": "Алексеев Алексей Алексеевич",
-    "ceo": "Степанов Степан Степанович",
     "endPeriodDate": "2024-12-31",
-    "ceoInitials": "Степанов С.С."
+    "representativeInitials": "Алексеев А.А."
 };
 
 await getPdfAuthorizingLetter(userData);
