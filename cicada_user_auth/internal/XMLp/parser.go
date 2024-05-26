@@ -8,6 +8,7 @@ import (
 
 type XMLData struct {
 	Company `json:"company"`
+	Signer  `json:"signer,omitempty"`
 	Cdata   time.Time `json:"ctime"`
 }
 type Company struct {
@@ -17,6 +18,11 @@ type Company struct {
 	INN            int64  `xml:"ИННЮЛ" json:"inn"`
 	OGRN           int64  `xml:"ОГРНТип" json:"ogrn"`
 	Representative string `xml:"ФИОТип" json:"representative"`
+}
+type Signer struct {
+	FCs   string `xml:"ФИО"`
+	INN   string `xml:"ИННФЛ"`
+	SNILS string `xml:"СНИЛС"`
 }
 
 func MarshallXML(byteValue []byte) (XMLData, error) {
