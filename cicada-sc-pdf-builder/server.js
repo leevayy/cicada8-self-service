@@ -21,23 +21,13 @@ const run = async () => {
         password: 'your_password'
     });
 
-    router.post('/api/proxySendPdfAuthorizingLetter', async (ctx) => {
+    router.post('/api/getAuthMail', async (ctx) => {
         try {
             const letter = { id: crypto.randomUUID(), content: await getPdfAuthorizingLetter(ctx.request.body) };
 
-            const response = await fetch('http://leha.com/api/sendAuthMail', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(letter)
-            });
+            // await db.none('INSERT INTO letters(id, letter) VALUES($1, $2)', [letter.id, JSON.stringify(letter)]);
 
-            if (!response.ok) {
-                throw new Error('Failed to send the letter');
-            }
-
-            await db.none('INSERT INTO letters(id, letter) VALUES($1, $2)', [letter.id, JSON.stringify(letter)]);
-
-            ctx.body = { status: 'success' };
+            ctx.body = { status: 'success', letter };
         } catch (error) {
             console.error(error);
             ctx.status = 500;
