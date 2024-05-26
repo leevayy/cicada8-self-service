@@ -2,6 +2,7 @@ package main
 
 import (
 	"cicada_user_auth/internal/config"
+	"cicada_user_auth/internal/http-server/handlers/GetSignatureStatus"
 	"cicada_user_auth/internal/http-server/handlers/sendAuthMail"
 	"cicada_user_auth/internal/http-server/handlers/sendMRP"
 	"github.com/go-chi/chi/v5"
@@ -18,6 +19,7 @@ func main() {
 	router.Route("/api", func(r chi.Router) {
 		r.Post("/sendMRP", sendMRP.New())
 		r.Post("/sendAuthMail", sendAuthMail.New(cfg.APIKey, cfg.Message))
+		r.Get("/getSignatureStatus/{signID}", GetSignatureStatus.New(cfg.APIKey))
 	})
 	srv := http.Server{
 		Addr:         cfg.Address,
@@ -30,4 +32,5 @@ func main() {
 		log.Fatalf("listen: %s\n", err)
 	}
 	println("Server shutdown")
+
 }

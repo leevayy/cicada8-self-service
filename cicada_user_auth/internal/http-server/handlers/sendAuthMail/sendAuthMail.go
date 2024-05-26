@@ -2,7 +2,7 @@ package sendAuthMail
 
 import (
 	"cicada_user_auth/internal/lib/api"
-	"cicada_user_auth/internal/signatureAPI"
+	"cicada_user_auth/internal/signatureAPI/SendSignatureRequest"
 	"github.com/go-chi/render"
 	"io"
 	"mime/multipart"
@@ -47,12 +47,12 @@ func New(APIKey, msg string) func(w http.ResponseWriter, r *http.Request) {
 		}
 		defer oFile.Close()
 		bytesFile, err := io.ReadAll(oFile)
-		buf, ct, err := signatureAPI.New(bytesFile, name, email, msg)
+		buf, ct, err := SendSignatureRequest.New(bytesFile, name, email, msg)
 		if err != nil {
 			render.Status(r, http.StatusInternalServerError)
 			render.JSON(w, r, api.Error("Failed to create signature"))
 		}
-		signID, err := signatureAPI.Sign(APIKey, buf, ct)
+		signID, err := SendSignatureRequest.Sign(APIKey, buf, ct)
 		if err != nil {
 			render.Status(r, http.StatusInternalServerError)
 			render.JSON(w, r, api.Error("Failed to create signature"))

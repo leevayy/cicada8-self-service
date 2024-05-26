@@ -1,4 +1,4 @@
-package signatureAPI
+package SendSignatureRequest
 
 import (
 	"bytes"
