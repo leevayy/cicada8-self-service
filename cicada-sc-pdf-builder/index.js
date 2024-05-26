@@ -11,7 +11,6 @@ const userData = {
     "currentDate": "2024-05-26",
     "representative": "Алексеев Алексей Алексеевич",
     "endPeriodDate": "2024-12-31",
-    "representativeInitials": "Алексеев А.А."
 };
 
 run();
