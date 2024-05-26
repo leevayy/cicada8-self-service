@@ -11,6 +11,7 @@ type Config struct {
 	APIKey  string        `yaml:"API_KEY"`
 	Address string        `yaml:"address" env-default:"localhost:8080"`
 	Timeout time.Duration `yaml:"timeout" env-default:"4s"`
+	Message string        `yaml:"message"`
 }
 
 func MustLoad() (*Config, error) {

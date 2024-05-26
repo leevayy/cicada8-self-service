@@ -1,4 +1,5 @@
 API_KEY: "dd9c201a17b8b2dc5dc0183ea2bb2aedb51142ea8326c9453b53720e3a59c469"
 address: "localhost:8083"
 timeout: 10s
+message: "Пожалуйста, подпишите авторизационное письмо чтобы продолжить работу"
 

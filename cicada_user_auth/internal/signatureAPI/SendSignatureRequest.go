@@ -2,6 +2,7 @@ package signatureAPI
 
 import (
 	"bytes"
+	"encoding/json"
 	"io"
 	"mime/multipart"
 	"net/http"
@@ -16,6 +17,16 @@ type Request struct {
 type Signers struct {
 	Name  string `json:"name"`
 	Email string `json:"email_address"`
+}
+
+type SignatureRequest struct {
+	SignatureRequestID string `json:"signature_request_id"`
+	// Можно добавить остальные поля, если нужно
+}
+
+// Определяем структуру для верхнего уровня JSON объекта
+type Response struct {
+	SignatureRequest SignatureRequest `json:"signature_request"`
 }
 
 func New(fileBytes []byte, name, email, message string) (bytes.Buffer, string, error) {
@@ -35,7 +46,7 @@ func New(fileBytes []byte, name, email, message string) (bytes.Buffer, string, e
 		return requestBody, "", err
 	}
 	fields := map[string]string{
-		"subject":                   "Авторизационное письмо о котором мы говорили:)",
+		"subject":                   "Подпись авторизационного письма",
 		"message":                   message,
 		"signers[0][email_address]": email,
 		"signers[0][name]":          name,
@@ -54,24 +65,24 @@ func New(fileBytes []byte, name, email, message string) (bytes.Buffer, string, e
 	return requestBody, writer.FormDataContentType(), nil
 }
 
-func Sign(APIkey string, buffer bytes.Buffer, ct string) error {
-	println(buffer.String())
+func Sign(APIkey string, buffer bytes.Buffer, ct string) (string, error) {
 	req, err := http.NewRequest("POST", "https://api.hellosign.com/v3/signature_request/send", &buffer)
 	if err != nil {
-		return err
+		return "", err
 	}
 	req.SetBasicAuth(APIkey, "")
 	req.Header.Set("Content-Type", ct)
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		return err
+		return "", err
 	}
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
+	var response Response
+	err = json.Unmarshal(body, &response)
 	if err != nil {
-		return err
+		return "", err
 	}
-	println(string(body))
-	return nil
+	return response.SignatureRequest.SignatureRequestID, nil
 }
