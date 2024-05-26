@@ -99,7 +99,7 @@ _________________ ${representativeInitials}             _________________ Пет
         const wrappedLines = line.split('\n');
         for (const wrappedLine of wrappedLines) {
             if (yPosition < FONT_SIZE + MARGIN_TOP) { 
-                page = pdfDoc.addPage();
+            //     page = pdfDoc.addPage();
                 yPosition = page.getSize().height - MARGIN_TOP; 
             }
             page.drawText(wrappedLine, { x: MARGIN_LEFT, y: yPosition, size: FONT_SIZE, font: timesNewRomanFont });
@@ -113,7 +113,7 @@ _________________ ${representativeInitials}             _________________ Пет
     }
 
     const pdfBytes = await pdfDoc.save();
-    fs.writeFileSync('result.pdf', pdfBytes);
+    fs.writeFileSync('AuthMessage.pdf', pdfBytes);
 }
 
 export default getPdfAuthorizingLetter;
