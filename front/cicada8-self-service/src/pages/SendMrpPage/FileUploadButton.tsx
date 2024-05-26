@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import sendMRP from '../../api/sendMRP.ts';
+import sendMRP from '../../api/sendMRP';
 
 export type UserData = {
   "organizationName": string,
@@ -7,7 +7,6 @@ export type UserData = {
   "phone": string,
   "inn": number,
   "ogrn": number,
-  "currentDate": string,
   "representative": string,
 } 
 
@@ -27,18 +26,7 @@ const FileUploadButton: React.FC<FileUploadButtonProps> = ({onSuccess}) => {
     if (!file) {
       return;
     }
-    // const response = await sendMRP(file);
-    const response =  {
-      "company": {
-        "name": "ООО Информационные технологии",
-        "address": "Улица Пушкина, дом Колотушкина",
-        "number": "89811400226",
-        "inn": 9204329502,
-        "ogrn": 1230932804,
-        "representative": "Иванов Иван Иванович",
-      }, 
-      "ctime": "2024-05-2615:25:13.653097849+03:00"
-    }
+    const response = await sendMRP(file);
 
     if (!response) {
       console.error('Empty response with code 200!');
@@ -51,8 +39,7 @@ const FileUploadButton: React.FC<FileUploadButtonProps> = ({onSuccess}) => {
       "phone": response.company.number,
       "inn": response.company.inn,
       "ogrn": response.company.ogrn,
-      "currentDate": "2024-05-26",
-      "representative": "Алексеев Алексей Алексеевич"
+      "representative": response.company.representative,
     });
   };
 

@@ -7,6 +7,10 @@
   font-family: 'Roboto';
 }
 
+input[type=number] {
+  appearance: textfield;
+}
+
 body {
   background-color: black;
   color: white;

@@ -1,0 +1,21 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  cicada_user_auth:
+    build:
+      context: ./cicada_user_auth
+    ports:
+      - "8083:8083"  # Adjust according to your application's port
+
+  cicada_sc_pdf_builder:
+    build:
+      context: ./cicada-sc-pdf-builder
+    ports:
+      - "3000:3000"  # Adjust according to your application's port
+
+  cicada8_self_service:
+    build:
+      context: ./front/cicada8-self-service
+    ports:
+      - "5173:5173"  # Adjust according to your application's port

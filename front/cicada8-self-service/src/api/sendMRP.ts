@@ -15,7 +15,7 @@ export default async function sendMRP(file: File) {
       formData.append('document', file);
 
     try {
-        const response = await fetch('localhost:8083/api/sendMRP', {
+        const response = await fetch('http://localhost:8083/api/sendMRP', {
           method: 'POST',
           body: formData,
         });

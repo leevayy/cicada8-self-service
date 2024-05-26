@@ -48,6 +48,10 @@
   line-height: 1.5;
 }
 
+.register .block {
+  padding-block: 20px;
+}
+
 .info, .text {
   display: flex;
   flex-direction: column;
@@ -55,13 +59,33 @@
   text-align: center;
 }
 
-.button {
+.block form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.button, form input {
   height: 50px;
   width: 360px;
   background-color: #7CE1D6;
+  color: black;
   border-radius: 10px;
+  border: none;
 
+  font-size: 18px;
+}
+
+.button {
   font-weight: 500;
+}
+
+form input {
+  background-color: #232323;
+  color: white;
+  padding: 0 20px;
 }
 
 .smallText {
