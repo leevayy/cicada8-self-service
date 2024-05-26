@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:20
 
 WORKDIR /app
 
@@ -9,6 +9,8 @@ RUN npm install
 COPY . .
 
 RUN npm run build
+
+COPY . .
 
 EXPOSE 4173
 

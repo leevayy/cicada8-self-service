@@ -2,7 +2,6 @@ import Koa from 'koa';
 import Router from 'koa-router';
 import bodyParser from 'koa-bodyparser';
 import pgPromise from 'pg-promise';
-import fetch from 'node-fetch';
 import getPdfAuthorizingLetter from './getPdfAuthorizingLetter.js';
 
 const run = async () => {

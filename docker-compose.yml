@@ -1,6 +1,3 @@
-# docker-compose.yml
-version: '3.8'
-
 services:
   cicada_user_auth:
     build:
