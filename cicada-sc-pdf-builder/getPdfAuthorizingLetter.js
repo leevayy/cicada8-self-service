@@ -12,11 +12,14 @@ async function getPdfAuthorizingLetter({
     letterNumber,
     currentDate,
     representative,
-    representativeInitials,
     endPeriodDate
 }) {
     const pdfDoc = await PDFDocument.create();
     const firstPage = pdfDoc.addPage();
+
+    String.prototype.toLocaleUpperCase
+
+    const representativeInitials = representative.split(' ').map( (el, i) => i === 0 ? el : el.toLocaleUpperCase()[0] + '.')
 
     pdfDoc.registerFontkit(fontkit);
 
@@ -113,7 +116,8 @@ _________________ ${representativeInitials}             _________________ Пет
     }
 
     const pdfBytes = await pdfDoc.save();
-    fs.writeFileSync('AuthMessage.pdf', pdfBytes);
+    return pdfBytes;
+    // fs.writeFileSync('AuthMessage.pdf', pdfBytes);
 }
 
 export default getPdfAuthorizingLetter;

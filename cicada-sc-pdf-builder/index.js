@@ -1,4 +1,5 @@
 import getPdfAuthorizingLetter from "./getPdfAuthorizingLetter.js";
+import run from "./server.js";
 
 const userData = {
     "organizationName": "ООО \"Информационные технологии\"",
@@ -13,4 +14,6 @@ const userData = {
     "representativeInitials": "Алексеев А.А."
 };
 
-await getPdfAuthorizingLetter(userData);
+run();
+
+// await getPdfAuthorizingLetter(userData);
