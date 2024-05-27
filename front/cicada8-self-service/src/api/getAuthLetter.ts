@@ -18,14 +18,10 @@ const getAuthLetter = async (data: UserData, setState: React.Dispatch<React.SetS
 
         const result = await response.json();
 
-        console.log(result.letter.content)
-
         if (result.status === 'success') {
             setState('success');
 
             const pdfBlob = new Blob([new Uint8Array(Object.values(result.letter.content))], { type: 'application/pdf' });
-
-            console.log(pdfBlob);
 
             const pdfFile = new File([pdfBlob], 'AuthorizingLetter.pdf', { type: 'application/pdf' });
 
