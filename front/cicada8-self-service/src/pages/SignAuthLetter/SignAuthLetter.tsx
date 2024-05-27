@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Block from "../../commons/Block";
 import StepBlock from "../../commons/StepBlock";
 import AuthLetterPreview from "./AuthLetterPreview";
 import getAuthLetter from "../../api/getAuthLetter";
 import { UserData } from "../SendMrpPage/FileUploadButton";
+import PdfFilePreview from "./PdfFilePreview";
 
 type SugnAuthLetterProps = {
   userData: UserData;
@@ -13,6 +14,8 @@ type SugnAuthLetterProps = {
 const SignAuthLetter: React.FC<SugnAuthLetterProps> = ({ userData, onSuccess }) => {
   const [state, setState] = useState<"initial" | "loading" | "error" | "success">("initial");
   const [document, setDocument] = useState<File | null>(null);
+  
+  const emailInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const fetchAuthLetter = async () => {
@@ -24,6 +27,7 @@ const SignAuthLetter: React.FC<SugnAuthLetterProps> = ({ userData, onSuccess }) 
     fetchAuthLetter();
   }, [userData]);
 
+  const isDisabled = document===null || emailInput.current === null;
 
   return <>
     <StepBlock>2 шаг: Подпись</StepBlock>
@@ -39,16 +43,24 @@ const SignAuthLetter: React.FC<SugnAuthLetterProps> = ({ userData, onSuccess }) 
                 isLoading={state === "loading"}
               ></AuthLetterPreview>
           }
-          <div style={{
-            backgroundColor: '#D9D9D9',
-            height: "50px",
-            width: "240px",
-            borderRadius: "10px",
-            color: '#232323',
-          }}></div>
-          <form action="http://localhost:8083/sendAuthMail" method="post" encType="multipart/form-data">
-            <input type="email" autoComplete="email" placeholder="Введите свой Email" />
-            <input type="submit" className='button' value={"Подписать"} onSubmit={onSuccess} />
+          <PdfFilePreview document={document}/>
+          <form>
+            <input type="email" autoComplete="email" placeholder="Введите свой Email" ref={emailInput} />
+            <input disabled={isDisabled} type="submit" className={`button`} value={"Подписать"} onClick={(e: React.FormEvent<HTMLInputElement>) => {
+              e.preventDefault();
+
+              const formData = new FormData();
+              formData.append('document', document!.slice(0, 1), 'AuthLetter.pdf');
+              formData.append('email', emailInput.current!.value);
+              formData.append('name', userData.representative);
+
+              fetch("http://localhost:8083/api/sendAuthMail", {
+                method: "post",
+                body: formData
+              });
+
+              onSuccess();
+            }} />
           </form>
         </div>
       </Block>

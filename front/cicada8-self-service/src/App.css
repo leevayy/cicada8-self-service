@@ -76,7 +76,15 @@
   border: none;
 
   font-size: 18px;
+
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: auto;
+  }
 }
+
 
 .button {
   font-weight: 500;
@@ -96,3 +104,14 @@ form input {
   }
 }
 
+.pdf {
+  display: flex;
+  flex-direction: row;
+  gap: 10px
+}
+
+.pdf div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
