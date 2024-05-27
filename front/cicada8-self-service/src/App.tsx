@@ -6,7 +6,7 @@ import { UserData } from './pages/SendMrpPage/FileUploadButton';
 import SendInformationPage from './pages/SendInformationPage/SendInformationPage';
 
 function App() {
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(2);
 
   const [userData, setUserData] = useState<UserData| null>(null); 
 
