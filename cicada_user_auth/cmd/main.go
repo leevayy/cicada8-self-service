@@ -2,19 +2,22 @@ package main
 
 import (
 	"cicada_user_auth/internal/config"
+	"cicada_user_auth/internal/http-server/handlers/CheckMRP"
 	"cicada_user_auth/internal/http-server/handlers/GetSignatureStatus"
 	"cicada_user_auth/internal/http-server/handlers/sendAuthMail"
 	"cicada_user_auth/internal/http-server/handlers/sendMRP"
+	"cicada_user_auth/testStorage"
+	"github.com/go-chi/chi/v5"
 	"log"
 	"net/http"
 
-	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
 )
 
 func main() {
 	cfg, err := config.MustLoad()
+	storage := testStorage.NewStorage()
 	if err != nil {
 		panic(err)
 	}
@@ -34,9 +37,10 @@ func main() {
 	router.Use(cors.Handler(corsOptions))
 
 	router.Route("/api", func(r chi.Router) {
-		r.Post("/sendMRP", sendMRP.New())
+		r.Post("/sendMRP", sendMRP.New(storage))
 		r.Post("/sendAuthMail", sendAuthMail.New(cfg.APIKey, cfg.Message))
 		r.Get("/getSignatureStatus/{signID}", GetSignatureStatus.New(cfg.APIKey))
+		r.Post("/checkMRP", CheckMRP.New(storage))
 	})
 
 	srv := http.Server{
@@ -50,4 +54,5 @@ func main() {
 		log.Fatalf("listen: %s\n", err)
 	}
 	println("Server shutdown")
+
 }

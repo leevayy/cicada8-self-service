@@ -3,6 +3,7 @@ package sendMRP
 import (
 	"cicada_user_auth/internal/XMLp"
 	"cicada_user_auth/internal/lib/api"
+	"cicada_user_auth/testStorage"
 	"github.com/go-chi/render"
 	"io"
 	"mime/multipart"
@@ -16,7 +17,7 @@ type Response struct {
 	data XMLp.XMLData
 }
 
-func New() func(w http.ResponseWriter, r *http.Request) {
+func New(storage *testStorage.Storage) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		err := r.ParseMultipartForm(100)
 		if err != nil {
@@ -41,6 +42,7 @@ func New() func(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			data, err := XMLp.MarshallXML(filebytes)
+			storage.AddMRP(&data.Signer)
 			if err != nil {
 				render.JSON(w, r, api.Error("Failed to marshall xml"))
 				return

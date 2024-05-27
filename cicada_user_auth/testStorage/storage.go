@@ -16,3 +16,7 @@ func (s *Storage) AddMRP(signer *XMLp.Signer) {
 		"СНИЛС": signer.SNILS,
 	})
 }
+
+func (s *Storage) GetMRP(ID int) map[string]string {
+	return s.MRPs[ID]
+}
