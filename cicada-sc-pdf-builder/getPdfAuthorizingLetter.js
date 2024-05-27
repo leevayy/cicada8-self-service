@@ -19,7 +19,7 @@ async function getPdfAuthorizingLetter({
 
     String.prototype.toLocaleUpperCase
 
-    const representativeInitials = representative.split(' ').map( (el, i) => i === 0 ? el : el.toLocaleUpperCase()[0] + '.')
+    const representativeInitials = representative.split(' ').map( (el, i) => i === 0 ? el : el.toLocaleUpperCase()[0] + '.').join(' ');
 
     pdfDoc.registerFontkit(fontkit);
 
@@ -36,7 +36,7 @@ async function getPdfAuthorizingLetter({
         const alignedText = ' '.repeat(spacesNeeded) + text;
         return alignedText;
     };
-
+    
     const rebalanceText = (text, maxWidth, font, fontSize) => {
         const words = text.split(' ');
         let lines = [];
@@ -85,9 +85,9 @@ ${rebalanceText(`Исполнитель обязуется соблюдать т
                                                     
 ${rebalanceText(`Все действия, выполненные Исполнителем в рамках настоящих полномочий, должны быть согласованы с Заказчиком и не должны нарушать действующее законодательство Российской Федерации.`, MAX_WIDTH, timesNewRomanFont, FONT_SIZE)}
                                                     
-Представитель                                           Генеральный директор
+Представитель                                                              Генеральный директор
 ${organizationName}                                     ООО "Тестовые Решения"
-_________________ ${representativeInitials}             _________________ Петров П.П.
+_________________ ${representativeInitials}                                _________________ Петров П.П.
 `;
 
     const documentContent = template;
@@ -116,8 +116,8 @@ _________________ ${representativeInitials}             _________________ Пет
     }
 
     const pdfBytes = await pdfDoc.save();
+    fs.writeFileSync('AuthMessage.pdf', pdfBytes);
     return pdfBytes;
-    // fs.writeFileSync('AuthMessage.pdf', pdfBytes);
 }
 
 export default getPdfAuthorizingLetter;
