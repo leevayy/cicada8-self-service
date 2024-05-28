@@ -48,11 +48,13 @@ const SignAuthLetter: React.FC<SignAuthLetterProps> = ({ userData, onSuccess }) 
 
     setId(responseJson.signature_request_id);
 
-    console.log(responseJson)
-
     setIsModalOpen(true);
 
-    console.log(2)
+    let pollingInProgressTimeMs = 0;
+
+    const POLLING_TIMEOUT = 5000;
+
+    const MAX_POLLING_TIME = 15 * 60 * 1000;
 
     const longPoll = async (status: boolean) => {
       if (status) {
@@ -60,20 +62,27 @@ const SignAuthLetter: React.FC<SignAuthLetterProps> = ({ userData, onSuccess }) 
         return setIsModalOpen(false);
       }
 
+      if (pollingInProgressTimeMs > MAX_POLLING_TIME) {
+        alert("Timeout");
+        return;
+      }
+
       const responseStatus = await fetch("http://localhost:8083/api/getSignatureStatus/" + id, {});
   
       const responseStatusJson = await responseStatus.json();
 
+      if (!responseStatus.ok) {
+        alert("Fetching error");
+        return;
+      }
+
       setTimeout(() => {
+        pollingInProgressTimeMs += POLLING_TIMEOUT;
         longPoll(responseStatusJson.status);
-      }, 5000);
+      }, POLLING_TIMEOUT);
     }
 
-    console.log(3)
-
     await longPoll(false);
-
-    console.log(4)
   };
 
   return (
